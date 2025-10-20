@@ -12,8 +12,16 @@ class MainController : public engine::core::Controller {
 
     bool loop() override;
 
+    void begin_draw() override;
+
+    void draw() override;
+
+    void draw_convertible();
+
+    void end_draw() override;
+
 public:
-    std::string_view name() const override { return "app::MainControlle"; };
+    std::string_view name() const override { return "app::MainController"; };
 };
 }
 #endif //MATF_RG_PROJECT_MAINCONTROLLER_HPP
