@@ -24,6 +24,8 @@ class MainController : public engine::core::Controller {
 
     void draw_pyramid();
 
+    void draw_cube();
+
     void draw_land();
 
     void draw_skybox();

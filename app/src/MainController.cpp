@@ -67,10 +67,29 @@ void MainController::draw_pyramid() {
     shader->set_mat4("view", graphics->camera()->view_matrix());
     shader->set_mat4("model", glm::mat4(1.0f));
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(10.0f, -3.0f, -2.5f));
+    model = glm::translate(model, glm::vec3(10.0f, -3.2f, -2.5f));
     model = glm::scale(model, glm::vec3(4.0f));
     shader->set_mat4("model", model);
     pyramid->draw(shader);
+}
+
+void MainController::draw_cube() {
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    engine::resources::Model *cube = resources->model("Ball");
+    //Shader
+    engine::resources::Shader *shader = resources->shader("basic");
+
+    shader->use();
+    shader->set_mat4("projection", graphics->projection_matrix());
+    shader->set_mat4("view", graphics->camera()->view_matrix());
+    shader->set_mat4("model", glm::mat4(1.0f));
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(10.0f, -2.9f, -1.35f));
+    model = glm::scale(model, glm::vec3(0.001f));
+    shader->set_mat4("model", model);
+
+    cube->draw(shader);
 }
 
 void MainController::draw_land() {
@@ -127,14 +146,27 @@ void MainController::draw() {
     auto shader = resources->shader("basic");
     shader->use();
 
+    //Directional
     shader->set_vec3("dirLightDirection", glm::vec3(-0.8f, -1.0f, -0.4f));
-    shader->set_vec3("dirLightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader->set_vec3("dirLightColor", glm::vec3(0.3f, 0.3f, 0.3f));
+
+    //Spotlight
+    shader->set_vec3("spotLightPos", glm::vec3(10.0f, -2.9f, -1.35f));               // odakle svetli (npr. piramida)
+    shader->set_vec3("spotLightDir", glm::normalize(glm::vec3(0.35f, -0.4f, 1.35f)));// ka autu
+    shader->set_vec3("spotLightColor", glm::vec3(1.0f, 1.0f, 0.9f));                 // žućkasto svetlo
+    shader->set_float("spotCutOff", glm::cos(glm::radians(40.5f)));                  // unutrašnji ugao
+    shader->set_float("spotOuterCutOff", glm::cos(glm::radians(50.5f)));
+
+    //Camera
     shader->set_vec3("viewPos", graphics->camera()->Position);
     shader->set_float("shininess", 32.0f);
-    shader->set_vec3("ambientStrength", glm::vec3(0.5f));
-    shader->set_vec3("specularColor", glm::vec3(1.0f));
+    shader->set_vec3("ambientStrength", glm::vec3(0.1f));
+    shader->set_vec3("specularColor", glm::vec3(0.5f));
+
+    //Draw
     draw_convertible();
     draw_pyramid();
+    draw_cube();
     draw_land();
     draw_skybox();
 }

@@ -12,6 +12,10 @@
       "Pyramid": {
         "path": "Pyramid/PUSHILIN_pyramid.obj",
         "flip_uvs": true
+      },
+      "Ball": {
+        "path": "Cube/RubiksCube_01(1).obj",
+        "flip_uvs": true
       }
     }
   },
