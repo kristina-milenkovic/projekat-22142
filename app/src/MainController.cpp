@@ -55,6 +55,14 @@ void MainController::draw_convertible() {
     convertible->draw(shader);
 }
 
+void MainController::draw_skybox() {
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto skybox = resources->skybox("penguins");
+    auto shader = resources->shader("skybox");
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    graphics->draw_skybox(shader, skybox);
+}
+
 void MainController::update_camera() {
     auto gui_controller = engine::core::Controller::get<GUIController>();
     if (gui_controller->is_enabled()) { return; }
@@ -77,9 +85,8 @@ void MainController::update() { update_camera(); }
 void MainController::begin_draw() { engine::graphics::OpenGL::clear_buffers(); }
 
 void MainController::draw() {
-    //clear buffers(color buffer, depth buffer)
     draw_convertible();
-    //swapBuffers
+    draw_skybox();
 }
 
 void MainController::end_draw() {
