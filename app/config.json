@@ -5,7 +5,7 @@
         "path": "Convertible/Convertible.obj",
         "flip_uvs": true
       },
-      "Land": {
+      "Desert": {
         "path": "Desert/CUPIC_DESERT.obj",
         "flip_uvs": true
       },
@@ -15,6 +15,10 @@
       },
       "Ball": {
         "path": "Cube/RubiksCube_01(1).obj",
+        "flip_uvs": true
+      },
+      "Mouse": {
+        "path": "Mouse/SpinyMouse.obj",
         "flip_uvs": true
       }
     }

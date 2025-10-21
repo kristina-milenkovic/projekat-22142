@@ -5,14 +5,18 @@
 #ifndef MATF_RG_PROJECT_MAINCONTROLLER_HPP
 #define MATF_RG_PROJECT_MAINCONTROLLER_HPP
 #include "engine/core/Controller.hpp"
+#include <glm/glm.hpp>
 
 namespace app {
 class MainController : public engine::core::Controller {
+
     void initialize() override;
 
     bool loop() override;
 
     void update() override;
+
+    void update_light();
 
     void update_camera();
 
@@ -26,13 +30,14 @@ class MainController : public engine::core::Controller {
 
     void draw_cube();
 
-    void draw_land();
+    void draw_desert();
 
     void draw_skybox();
 
     void end_draw() override;
 
 public:
+    glm::vec3 SpotlightDir = glm::vec3(0.35f, -10.0f, 1.35f);
     std::string_view name() const override { return "app::MainController"; };
 };
 }
