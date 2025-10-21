@@ -122,6 +122,17 @@ void MainController::update() { update_camera(); }
 void MainController::begin_draw() { engine::graphics::OpenGL::clear_buffers(); }
 
 void MainController::draw() {
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    auto shader = resources->shader("basic");
+    shader->use();
+
+    shader->set_vec3("dirLightDirection", glm::vec3(-0.8f, -1.0f, -0.4f));
+    shader->set_vec3("dirLightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    shader->set_vec3("viewPos", graphics->camera()->Position);
+    shader->set_float("shininess", 32.0f);
+    shader->set_vec3("ambientStrength", glm::vec3(0.5f));
+    shader->set_vec3("specularColor", glm::vec3(1.0f));
     draw_convertible();
     draw_pyramid();
     draw_land();
