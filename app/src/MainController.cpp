@@ -5,7 +5,6 @@
 #include <engine/graphics/GraphicsController.hpp>
 #include <engine/graphics/OpenGL.hpp>
 #include <engine/platform/PlatformController.hpp>
-#include <engine/resources/Mesh.hpp>
 #include <engine/resources/ResourcesController.hpp>
 #include <spdlog/spdlog.h>
 
@@ -34,6 +33,26 @@ bool MainController::loop() {
     auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
     if (platform->key(engine::platform::KeyId::KEY_ESCAPE).is_down()) { return false; }
     return true;
+}
+
+void MainController::draw_mouse() {
+    if (!mouseActive) return;
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    engine::resources::Model *mouse = resources->model("Mouse");
+    //Shader
+    engine::resources::Shader *shader = resources->shader("basic");
+
+    shader->use();
+    shader->set_mat4("projection", graphics->projection_matrix());
+    shader->set_mat4("view", graphics->camera()->view_matrix());
+    shader->set_mat4("model", glm::mat4(1.0f));
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, mousePos);
+    if (!mouseReturning) { model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0)); }
+    model = glm::scale(model, glm::vec3(0.05f));
+    shader->set_mat4("model", model);
+    mouse->draw(shader);
 }
 
 void MainController::draw_convertible() {
@@ -92,10 +111,10 @@ void MainController::draw_cube() {
     cube->draw(shader);
 }
 
-void MainController::draw_land() {
+void MainController::draw_desert() {
     auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
-    engine::resources::Model *land = resources->model("Land");
+    engine::resources::Model *desert = resources->model("Desert");
     //Shader
     engine::resources::Shader *shader = resources->shader("basic");
 
@@ -108,7 +127,7 @@ void MainController::draw_land() {
     model = glm::scale(model, glm::vec3(0.03f));
     shader->set_mat4("model", model);
 
-    land->draw(shader);
+    desert->draw(shader);
 }
 
 void MainController::draw_skybox() {
@@ -136,7 +155,41 @@ void MainController::update_camera() {
     if (platform->key(engine::platform::KeyId::KEY_D).is_down()) { camera->move_camera(engine::graphics::Camera::Movement::RIGHT, dt); }
 }
 
-void MainController::update() { update_camera(); }
+void MainController::update_light() {
+    auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+    if (platform->key(engine::platform::KeyId::KEY_1).is_down()) { if (SpotlightDir.y > 1.5f) { SpotlightDir.y = 1.5f; } else { SpotlightDir.y += 0.05f; } }
+    if (platform->key(engine::platform::KeyId::KEY_2).is_down()) { if (SpotlightDir.y < -10.0f) { SpotlightDir.y = -10.0f; } else { SpotlightDir.y -= 0.05f; } }
+}
+
+void MainController::update_mouse() {
+    auto platform = engine::core::Controller::get<engine::platform::PlatformController>();
+
+    if ((platform->key(engine::platform::KeyId::KEY_M).state() == engine::platform::Key::State::JustPressed) && !mouseActive) {
+        mouseActive = true;
+        mouseReturning = false;
+        mousePos = mouseStartPos;
+    }
+
+    if (mouseActive) {
+        float speedZ = 0.003f;
+
+        if (!mouseReturning) {
+            mousePos.z -= speedZ * platform->frame_time().current;
+
+            if (mousePos.z <= mouseEndPos.z) { mouseReturning = true; }
+        } else {
+            mousePos.z += speedZ * platform->frame_time().current;
+
+            if (mousePos.z >= mouseStartPos.z) { mouseActive = false; }
+        }
+    }
+}
+
+void MainController::update() {
+    update_mouse();
+    update_light();
+    update_camera();
+}
 
 void MainController::begin_draw() { engine::graphics::OpenGL::clear_buffers(); }
 
@@ -151,10 +204,10 @@ void MainController::draw() {
     shader->set_vec3("dirLightColor", glm::vec3(0.3f, 0.3f, 0.3f));
 
     //Spotlight
-    shader->set_vec3("spotLightPos", glm::vec3(10.0f, -2.9f, -1.35f));               // odakle svetli (npr. piramida)
-    shader->set_vec3("spotLightDir", glm::normalize(glm::vec3(0.35f, -0.4f, 1.35f)));// ka autu
-    shader->set_vec3("spotLightColor", glm::vec3(1.0f, 1.0f, 0.9f));                 // žućkasto svetlo
-    shader->set_float("spotCutOff", glm::cos(glm::radians(40.5f)));                  // unutrašnji ugao
+    shader->set_vec3("spotLightPos", glm::vec3(10.0f, -2.9f, -1.35f));
+    shader->set_vec3("spotLightDir", glm::normalize(SpotlightDir));
+    shader->set_vec3("spotLightColor", glm::vec3(0.7f, 0.7f, 0.3f));
+    shader->set_float("spotCutOff", glm::cos(glm::radians(40.5f)));
     shader->set_float("spotOuterCutOff", glm::cos(glm::radians(50.5f)));
 
     //Camera
@@ -164,10 +217,11 @@ void MainController::draw() {
     shader->set_vec3("specularColor", glm::vec3(0.5f));
 
     //Draw
+    draw_mouse();
     draw_convertible();
     draw_pyramid();
     draw_cube();
-    draw_land();
+    draw_desert();
     draw_skybox();
 }
 

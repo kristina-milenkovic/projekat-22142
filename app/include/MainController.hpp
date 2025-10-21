@@ -18,6 +18,8 @@ class MainController : public engine::core::Controller {
 
     void update_light();
 
+    void update_mouse();
+
     void update_camera();
 
     void begin_draw() override;
@@ -27,6 +29,8 @@ class MainController : public engine::core::Controller {
     void draw_convertible();
 
     void draw_pyramid();
+
+    void draw_mouse();
 
     void draw_cube();
 
@@ -38,6 +42,16 @@ class MainController : public engine::core::Controller {
 
 public:
     glm::vec3 SpotlightDir = glm::vec3(0.35f, -10.0f, 1.35f);
+
+    bool mouseActive = false;
+    bool mouseReturning = false;
+    float mouseSpawnTime = -1.0f;
+    float mouseLifetime = 3.0f;
+    float currentTime = 0.0f;
+    glm::vec3 mouseStartPos = glm::vec3(10.0f, -4.4f, 5.35f);
+    glm::vec3 mouseEndPos = glm::vec3(10.0f, -4.4f, -5.0f);
+    glm::vec3 mousePos = mouseStartPos;
+
     std::string_view name() const override { return "app::MainController"; };
 };
 }
