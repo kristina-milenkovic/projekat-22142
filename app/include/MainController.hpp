@@ -22,6 +22,8 @@ class MainController : public engine::core::Controller {
 
     void draw_convertible();
 
+    void draw_land();
+
     void draw_skybox();
 
     void end_draw() override;

@@ -4,6 +4,10 @@
       "Convertible": {
         "path": "Convertible/Convertible.obj",
         "flip_uvs": true
+      },
+      "Land": {
+        "path": "Desert/CUPIC_DESERT.obj",
+        "flip_uvs": true
       }
     }
   },

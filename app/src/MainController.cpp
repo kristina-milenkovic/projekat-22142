@@ -49,15 +49,34 @@ void MainController::draw_convertible() {
     shader->set_mat4("view", graphics->camera()->view_matrix());
     shader->set_mat4("model", glm::mat4(1.0f));
     glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, -1.0f, -7.0f));
-    model = glm::scale(model, glm::vec3(0.3f));
+    model = glm::translate(model, glm::vec3(8.0f, -3.0f, 0.0f));
+    model = glm::scale(model, glm::vec3(0.1f));
     shader->set_mat4("model", model);
     convertible->draw(shader);
 }
 
+void MainController::draw_land() {
+    auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
+    auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
+    engine::resources::Model *land = resources->model("Land");
+    //Shader
+    engine::resources::Shader *shader = resources->shader("basic");
+
+    shader->use();
+    shader->set_mat4("projection", graphics->projection_matrix());
+    shader->set_mat4("view", graphics->camera()->view_matrix());
+    shader->set_mat4("model", glm::mat4(1.0f));
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(4.0f, -6.0f, -7.0f));
+    model = glm::scale(model, glm::vec3(0.05f));
+    shader->set_mat4("model", model);
+
+    land->draw(shader);
+}
+
 void MainController::draw_skybox() {
     auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-    auto skybox = resources->skybox("penguins");
+    auto skybox = resources->skybox("penguins2");
     auto shader = resources->shader("skybox");
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
     graphics->draw_skybox(shader, skybox);
@@ -86,6 +105,7 @@ void MainController::begin_draw() { engine::graphics::OpenGL::clear_buffers(); }
 
 void MainController::draw() {
     draw_convertible();
+    draw_land();
     draw_skybox();
 }
 
