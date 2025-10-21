@@ -8,6 +8,10 @@
       "Land": {
         "path": "Desert/CUPIC_DESERT.obj",
         "flip_uvs": true
+      },
+      "Pyramid": {
+        "path": "Pyramid/PUSHILIN_pyramid.obj",
+        "flip_uvs": true
       }
     }
   },
