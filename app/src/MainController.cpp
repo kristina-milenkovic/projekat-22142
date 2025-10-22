@@ -132,7 +132,7 @@ void MainController::draw_desert() {
 
 void MainController::draw_skybox() {
     auto resources = engine::core::Controller::get<engine::resources::ResourcesController>();
-    auto skybox = resources->skybox("penguins2");
+    auto skybox = resources->skybox("penguins");
     auto shader = resources->shader("skybox");
     auto graphics = engine::core::Controller::get<engine::graphics::GraphicsController>();
     graphics->draw_skybox(shader, skybox);
