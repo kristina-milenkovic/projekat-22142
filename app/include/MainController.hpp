@@ -45,9 +45,6 @@ public:
 
     bool mouseActive = false;
     bool mouseReturning = false;
-    float mouseSpawnTime = -1.0f;
-    float mouseLifetime = 3.0f;
-    float currentTime = 0.0f;
     glm::vec3 mouseStartPos = glm::vec3(10.0f, -4.4f, 5.35f);
     glm::vec3 mouseEndPos = glm::vec3(10.0f, -4.4f, -5.0f);
     glm::vec3 mousePos = mouseStartPos;
