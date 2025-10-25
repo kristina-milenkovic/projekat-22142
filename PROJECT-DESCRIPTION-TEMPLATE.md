@@ -46,6 +46,7 @@ AFTER_REACHING_END_POSITION --->
 
 ## Models:
 
+Model and Skybox file: https://drive.google.com/file/d/1YDev4BjHZaPvsjOg00c0iiP_7GK9pQJ_/view?usp=sharing<br>
 Convertible(Car): https://poly.pizza/m/dggOiBLYyuR<br>
 Desert: https://poly.pizza/m/a1HnTCHfE34 <br>
 Pyramid: https://poly.pizza/m/c-tEGK9e49p <br>
