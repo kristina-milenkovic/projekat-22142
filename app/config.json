@@ -1,11 +1,31 @@
 {
   "resources": {
     "models": {
+      "Convertible": {
+        "path": "Convertible/Convertible.obj",
+        "flip_uvs": true
+      },
+      "Desert": {
+        "path": "Desert/CUPIC_DESERT.obj",
+        "flip_uvs": true
+      },
+      "Pyramid": {
+        "path": "Pyramid/PUSHILIN_pyramid.obj",
+        "flip_uvs": true
+      },
+      "Ball": {
+        "path": "Cube/RubiksCube_01(1).obj",
+        "flip_uvs": true
+      },
+      "Mouse": {
+        "path": "Mouse/SpinyMouse.obj",
+        "flip_uvs": true
+      }
     }
   },
   "window": {
-    "height": 600,
+    "height": 1200,
     "title": "Hello, window!",
-    "width": 800
+    "width": 1600
   }
 }
